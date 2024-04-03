@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.rickandmortywin.model.HomeDto
 import br.com.rickandmortywin.model.Personagem
 import br.com.rickandmortywin.model.Resultados
 import br.com.rickandmortywin.services.RetrofitFactory
@@ -59,11 +60,31 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme
                         .colorScheme.background
                 ) {
-                    Greeting()
+                //requestToApi()
+                 Greeting()
                 }
             }
         }
     }
+}
+
+fun requestToApi() {
+    var requisicao = RetrofitFactory().homeServiceGetHomeData().buscarPersonagemPeloId(1)
+
+    //requisicao.enqueue(object : Callback<Resultados>{
+    requisicao.enqueue(object : Callback<HomeDto>{
+        override fun onResponse(call: Call<HomeDto>, response: Response<HomeDto>) {
+            var y  = response.body()!!.enterpriseId
+            var z = response.body()!!.recentPosts
+        }
+
+        override fun onFailure(call: Call<HomeDto>, t: Throwable) {
+            TODO("Not yet implemented")
+        }
+
+    })
+
+
 }
 
 @Composable
@@ -79,13 +100,17 @@ fun Greeting() {
     }
 
     // request to api
-    var requisicao = RetrofitFactory().listarTodosOsPersonagens().listarTodosOsPersornagens()
-    requisicao.enqueue(object : Callback<Resultados>{
-        override fun onResponse(call: Call<Resultados>, response: Response<Resultados>) {
-            listaDePersonagens.value = response.body()!!.results
+    //var requisicao = RetrofitFactory().listarTodosOsPersonagens().listarTodosOsPersornagens()
+    var requisicao = RetrofitFactory().homeServiceGetHomeData().buscarPersonagemPeloId(1)
+
+    //requisicao.enqueue(object : Callback<Resultados>{
+    requisicao.enqueue(object : Callback<HomeDto>{
+        override fun onResponse(call: Call<HomeDto>, response: Response<HomeDto>) {
+            var y  = response.body()!!.enterpriseId
+            var z = response.body()!!.recentPosts
         }
 
-        override fun onFailure(call: Call<Resultados>, t: Throwable) {
+        override fun onFailure(call: Call<HomeDto>, t: Throwable) {
             TODO("Not yet implemented")
         }
 
